@@ -32,6 +32,8 @@ bool AvlTree::addValue(int val) {
     if(p != nullptr && p->parent != nullptr) {
         upIn(p->parent);
     }
+    // when p i a nullptr, the value was already in the tree
+    // -> do nothing
     return true;
 }
 
@@ -66,13 +68,21 @@ AvlTree::Node* AvlTree::add(int val, Node *p) {
 
 bool AvlTree::searchValue(int val) {
 
+    Node* p = search(val);
+
+    return p != nullptr;
+
+}
+
+AvlTree::Node* AvlTree::search(int val) {
+
     Node* p = root;
     while(true) {
         if(p == nullptr) {
-            return false;
+            return nullptr;
         }
         else if(p->value == val) {
-            return true;
+            return p;
         }
         else if(val < p->value){
             p = p->child_left;
@@ -83,7 +93,6 @@ bool AvlTree::searchValue(int val) {
     }
 
 }
-
 void AvlTree::upIn(Node *p) {
 
     if(p->parent == nullptr) {
@@ -198,5 +207,108 @@ std::string AvlTree::printTree(Node *p) {
         return "";
     }
     return std::to_string(p->value) + ", " + printTree(p->child_left) + printTree(p->child_right);
+
+}
+
+bool AvlTree::removeValue(int val) {
+
+    Node* p = search(val);
+
+    if(p == nullptr) {
+        return true;
+    }
+
+    Node* parent;
+    parent = p->parent;
+    // Fall 1 : 2 Blätter
+    if(p->child_right == nullptr && p->child_left == nullptr) {
+        if(parent->child_left == p) {
+            parent->child_left = nullptr;
+            parent->bal += 1;
+            if(parent->bal > 1) {
+                parent->bal = 1;
+            }
+            //check height
+            if(parent->child_right != nullptr) {
+                // height 2
+                if (parent->child_right->child_left != nullptr) {
+                    rotateRight(parent->child_right->child_left);
+                    rotateLeft(parent->child_right);
+                }
+                else if(parent->child_right->child_right != nullptr) {
+                    rotateLeft(parent->child_right);
+                }
+                // height 1 and height 0
+                // do nothing because balance is already updated.
+            }
+        }
+        else {
+            parent->child_right = nullptr;
+            parent->bal -= 1;
+            if(parent->bal < -1) {
+                parent->bal = -1;
+            }
+
+            //check height
+            if(parent->child_left != nullptr) {
+                // height 2
+                if (parent->child_left->child_right != nullptr) {
+                    rotateLeft(parent->child_left->child_right);
+                    rotateRight(parent->child_right);
+                }
+                else if(parent->child_right->child_right != nullptr) {
+                    rotateRight(parent->child_left);
+                }
+                // height 1 and height 0
+                // do nothing because balance is already updated.
+            }
+        }
+
+    }
+        //Fall 2 : 1 Blatt, 1 Nachfolger
+    else if (p->child_right != nullptr && p->child_left == nullptr) {
+        if(p == root) {
+            root = p->child_right;
+            p->child_right->parent = nullptr;
+        }
+        else {
+            if(parent->child_right == p) {
+                parent->child_right = p->child_right;
+                p->child_right->parent = parent;
+            }
+            else {
+                parent->child_left = p->child_right;
+                p->child_right->parent = parent;
+            }
+        }
+    }
+    else if(p->child_left != nullptr && p->child_right == nullptr) {
+        if(p == root) {
+            root = p->child_left;
+            p->child_left->parent = nullptr;
+        }
+        else {
+            if(parent->child_left == p) {
+                parent->child_left = p->child_left;
+                p->child_left->parent = parent;
+            }
+            else {
+                parent->child_right = p->child_left;
+                p->child_left->parent = parent;
+            }
+        }
+    }
+        // Fall 3: 2 Nachfolger
+    else {
+
+    }
+
+
+    delete p;
+    upOut(parent);
+
+}
+
+void AvlTree::upOut(Node *) {
 
 }

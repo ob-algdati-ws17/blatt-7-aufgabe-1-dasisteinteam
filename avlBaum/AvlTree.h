@@ -22,9 +22,10 @@ private:
     void upIn(Node* p);
     void rotateRight(Node* p);
     void rotateLeft(Node* p);
-    void upOut(Node* *);
+    void upOut(Node* p);
 
     Node* add(int val, Node*p);
+    Node* search(int val);
 
     std::string printTree(Node* p);
 

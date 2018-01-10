@@ -161,4 +161,6 @@ TEST(AvlTest, Add_and_Search_after_double_rotate_Test) {
     EXPECT_TRUE(tree.searchValue(25));
     EXPECT_TRUE(tree.searchValue(5));
     EXPECT_TRUE(tree.searchValue(15));
+
+    EXPECT_FALSE(tree.searchValue(17));
 }
