@@ -24,9 +24,6 @@ private:
     void rotateLeft(Node* p);
     void upOut(Node* *);
 
-    bool hasChild(Node* p);
-    int getBal(Node* p);
-
     Node* add(int val, Node*p);
 
     std::string printTree(Node* p);

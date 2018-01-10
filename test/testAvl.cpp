@@ -1,5 +1,4 @@
 #include "testAvl.h"
-#include <memory>
 
 using namespace std;
 
@@ -140,4 +139,26 @@ TEST(AvlTest, Rotate_Double_Test) {
      *     5    12    25
      */
     EXPECT_EQ(tree.print(), "15, 10, 5, 12, 20, 25, \n");
+}
+
+TEST(AvlTest, Add_and_Search_after_double_rotate_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(15);
+    tree.addValue(12);
+
+    EXPECT_TRUE(tree.searchValue(12));
+    tree.addValue(22);
+    EXPECT_TRUE(tree.searchValue(22));
+
+    EXPECT_TRUE(tree.searchValue(20));
+    EXPECT_TRUE(tree.searchValue(10));
+    EXPECT_TRUE(tree.searchValue(25));
+    EXPECT_TRUE(tree.searchValue(5));
+    EXPECT_TRUE(tree.searchValue(15));
 }

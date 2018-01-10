@@ -1,8 +1,5 @@
 #include "AvlTree.h"
-
-#include <iostream>
 #include <cmath>
-#include <string>
 
 using namespace std;
 
@@ -21,10 +18,6 @@ AvlTree::~AvlTree() {
 
 bool AvlTree::isEmpty() {
     return root == nullptr;
-}
-
-bool AvlTree::hasChild(Node *p) {
-    return p->child_right != nullptr || p->child_left != nullptr;
 }
 
 bool AvlTree::addValue(int val) {
