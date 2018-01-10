@@ -27,13 +27,6 @@ bool AvlTree::hasChild(Node *p) {
     return p->child_right != nullptr || p->child_left != nullptr;
 }
 
-int AvlTree::getBal(Node *p) {
-    if(p == nullptr) {
-        return 0;
-    }
-    return p->bal;
-}
-
 bool AvlTree::addValue(int val) {
     // first element
     if(isEmpty()) {
@@ -43,7 +36,7 @@ bool AvlTree::addValue(int val) {
 
     //other elements
     Node* p = add(val, root);
-    if(p->parent != nullptr) {
+    if(p != nullptr && p->parent != nullptr) {
         upIn(p->parent);
     }
     return true;
@@ -119,8 +112,8 @@ void AvlTree::upIn(Node *p) {
                 rotateRight(p);
             }
             else if(p->bal == 1) {
-                rotateLeft(p);
-                rotateRight(p);
+                rotateLeft(p->child_right);
+                rotateRight(p->parent);
             }
         }
     }
@@ -140,8 +133,8 @@ void AvlTree::upIn(Node *p) {
                 rotateLeft(p);
             }
             else if(p->bal == -1) {
-                rotateRight(p);
-                rotateLeft(p);
+                rotateRight(p->child_left);
+                rotateLeft(p->parent);
             }
         }
     }
@@ -177,6 +170,7 @@ std::string AvlTree::print() {
 
 std::string AvlTree::printTree(Node *p) {
 
+    //preorder
     if(p == nullptr) {
         return "";
     }
