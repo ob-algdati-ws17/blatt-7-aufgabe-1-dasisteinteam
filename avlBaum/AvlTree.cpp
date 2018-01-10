@@ -110,10 +110,12 @@ void AvlTree::upIn(Node *p) {
         else {
             if(p->bal == -1) {
                 rotateRight(p);
+                return;
             }
             else if(p->bal == 1) {
                 rotateLeft(p->child_right);
                 rotateRight(p->parent);
+                return;
             }
         }
     }
@@ -131,10 +133,12 @@ void AvlTree::upIn(Node *p) {
         else {
             if(p->bal == 1) {
                 rotateLeft(p);
+                return;
             }
             else if(p->bal == -1) {
                 rotateRight(p->child_left);
                 rotateLeft(p->parent);
+                return;
             }
         }
     }
@@ -151,6 +155,19 @@ void AvlTree::rotateRight(Node *p) {
     parent->child_left = p->child_right;
     p->child_right = parent;
 
+    p->parent = parent->parent;
+    parent->parent = p;
+
+    if(p->parent != nullptr) {
+        if (p->parent->child_left == p->child_right) {
+            p->parent->child_left = p;
+        } else {
+            p->parent->child_right = p;
+        }
+    }
+
+    p->bal = 0;
+    parent->bal = 0;
 }
 
 void AvlTree::rotateLeft(Node *p) {
@@ -162,6 +179,19 @@ void AvlTree::rotateLeft(Node *p) {
     parent->child_right = p->child_left;
     p->child_left = parent;
 
+    p->parent = parent->parent;
+    parent->parent = p;
+
+    if(p->parent != nullptr) {
+        if (p->parent->child_left == p->child_left) {
+            p->parent->child_left = p;
+        } else {
+            p->parent->child_right = p;
+        }
+    }
+
+    p->bal = 0;
+    parent->bal = 0;
 }
 
 std::string AvlTree::print() {

@@ -14,7 +14,7 @@ TEST(AvlTest, EmptyTree_Test) {
     EXPECT_FALSE(tree.isEmpty());
 }
 
-TEST(AvlTest, Search_Test) {
+TEST(AvlTest, Search_and_Double_Rotate_Test) {
 
     AvlTree tree;
 
