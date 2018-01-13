@@ -495,3 +495,37 @@ TEST(AvlTest, Remove_Between_Both_2_Test) {
      *     5     23    28
      */
 }
+
+TEST(AvlTest, Remove_Between_One_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(23);
+    tree.addValue(28);
+    tree.addValue(24);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 24, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     23    28
+     *             \
+     *              24
+     */
+
+    tree.removeValue(23);
+
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 24, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     24    28
+     */
+}
