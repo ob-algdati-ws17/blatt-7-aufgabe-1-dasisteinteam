@@ -13,7 +13,22 @@ AvlTree::Node::Node(Node *parent, int value) {
 }
 
 AvlTree::~AvlTree() {
-    delete root;
+    if(!isEmpty()) {
+        rmNode(root);
+    }
+}
+
+void AvlTree::rmNode(Node *p) {
+
+    //postorder
+
+    if(p->child_left != nullptr) {
+        rmNode(p->child_left);
+    }
+    if(p->child_right != nullptr) {
+        rmNode(p->child_right);
+    }
+    delete p;
 }
 
 bool AvlTree::isEmpty() {

@@ -20,14 +20,16 @@ private:
     Node* root = nullptr;
 
     void upIn(Node* p);
+    void upOut(Node* p);
     void rotateRight(Node* p);
     void rotateLeft(Node* p);
-    void upOut(Node* p);
+
+    Node* getSymChild(Node* p);
+    void rmNode(Node* p);
 
     Node* add(int val, Node*p);
     Node* search(int val);
     bool remove(Node* p);
-    Node* getSymChild(Node* p);
 
     std::string printTree(Node* p);
 
