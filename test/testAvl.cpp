@@ -164,3 +164,79 @@ TEST(AvlTest, Add_and_Search_after_double_rotate_Test) {
 
     EXPECT_FALSE(tree.searchValue(17));
 }
+
+TEST(AvlTest, Remove_Simple_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(15);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 15, 25, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /  \
+     *     5    15
+     */
+
+    tree.removeValue(15);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /
+     *     5
+     */
+
+    tree.removeValue(25);
+    EXPECT_EQ(tree.print(), "10, 5, 20, \n");
+    /*
+     *          20
+     *         /
+     *        10
+     *      /
+     *     5
+     * ->
+     *
+     *      10
+     *     /  \
+     *    5    20
+     */
+
+}
+
+TEST(AvlTest, Remove_Root_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(15);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 15, 25, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /  \
+     *     5    15
+     */
+
+    tree.removeValue(20);
+
+    EXPECT_EQ(tree.print(), "15, 10, 5, 25, \n");
+    /*
+     *          15
+     *         /  \
+     *        10    25
+     *      /
+     *     5
+     */
+
+}

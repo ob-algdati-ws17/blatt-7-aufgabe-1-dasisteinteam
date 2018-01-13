@@ -26,6 +26,8 @@ private:
 
     Node* add(int val, Node*p);
     Node* search(int val);
+    bool remove(Node* p);
+    Node* getSymChild(Node* p);
 
     std::string printTree(Node* p);
 

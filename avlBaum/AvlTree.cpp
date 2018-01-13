@@ -95,7 +95,7 @@ AvlTree::Node* AvlTree::search(int val) {
 }
 void AvlTree::upIn(Node *p) {
 
-    if(p->parent == nullptr) {
+    if(p == root) {
         return;
     }
     // linker nachfolger
@@ -210,24 +210,19 @@ std::string AvlTree::printTree(Node *p) {
 
 }
 
-bool AvlTree::removeValue(int val) {
-
-    Node* p = search(val);
-
-    if(p == nullptr) {
-        return true;
-    }
-
+bool AvlTree::remove(Node *p) {
     Node* parent;
     parent = p->parent;
     // Fall 1 : 2 Blätter
     if(p->child_right == nullptr && p->child_left == nullptr) {
+        if (p == root) {
+            root = nullptr;
+            delete p;
+            return true;
+        }
         if(parent->child_left == p) {
             parent->child_left = nullptr;
-            parent->bal += 1;
-            if(parent->bal > 1) {
-                parent->bal = 1;
-            }
+
             //check height
             if(parent->child_right != nullptr) {
                 // height 2
@@ -238,16 +233,20 @@ bool AvlTree::removeValue(int val) {
                 else if(parent->child_right->child_right != nullptr) {
                     rotateLeft(parent->child_right);
                 }
-                // height 1 and height 0
-                // do nothing because balance is already updated.
+                    // height 1
+                else {
+                    parent->bal = 1;
+                    delete p;
+                    return true;
+                }
+            }
+            // height 0
+            else {
+                parent->bal = 0;
             }
         }
         else {
             parent->child_right = nullptr;
-            parent->bal -= 1;
-            if(parent->bal < -1) {
-                parent->bal = -1;
-            }
 
             //check height
             if(parent->child_left != nullptr) {
@@ -256,11 +255,19 @@ bool AvlTree::removeValue(int val) {
                     rotateLeft(parent->child_left->child_right);
                     rotateRight(parent->child_right);
                 }
-                else if(parent->child_right->child_right != nullptr) {
+                else if(parent->child_left->child_left != nullptr) {
                     rotateRight(parent->child_left);
                 }
-                // height 1 and height 0
-                // do nothing because balance is already updated.
+                // height 1
+                else {
+                    parent->bal = -1;
+                    delete p;
+                    return true;
+                }
+            }
+            // height 0
+            {
+                parent->bal = 0;
             }
         }
 
@@ -300,15 +307,123 @@ bool AvlTree::removeValue(int val) {
     }
         // Fall 3: 2 Nachfolger
     else {
+        Node* symChild = getSymChild(p);
+        p->value = symChild->value;
+        return remove(symChild);
 
     }
 
 
     delete p;
     upOut(parent);
+    return true;
+}
+
+bool AvlTree::removeValue(int val) {
+
+    Node* p = search(val);
+
+    if(p == nullptr) {
+        return true;
+    }
+
+    return remove(p);
+}
+
+
+AvlTree::Node * AvlTree::getSymChild(Node *p) {
+
+    // there is no need for security nullptr checks because this function is only called when the
+    // given parameter p has two childs;
+    Node* right = p->child_right;
+    Node* left = p->child_left;
+
+        while(right->child_left != nullptr) {
+            right = right->child_left;
+        }
+
+        while(left->child_right != nullptr) {
+            left = left->child_right;
+        }
+
+    if(right->value - p->value  < p->value - left->value) {
+        return right;
+    }
+    else {
+        return left;
+    }
+
 
 }
 
-void AvlTree::upOut(Node *) {
+void AvlTree::upOut(Node * p) {
+
+    if( p == root) {
+        return;
+    }
+
+    // linker nachfolger
+    if(p->parent->child_left == p) {
+
+        if(p->parent->bal == -1) {
+            p->parent->bal = 0;
+        }
+        else if (p->parent->bal == 0){
+            p->parent->bal = 1;
+            return;
+        }
+        else {
+            //1.3.1
+            if(p->parent->child_right->bal == 0) {
+                rotateLeft(p->parent->child_right);
+                // correct bal because bal is set in rotate
+                p->parent->bal = 1;
+                p->parent->parent->bal = -1;
+                return;
+            }
+                //1.3.2
+            else if(p->parent->child_right->bal == 1) {
+                rotateLeft(p->parent->child_right);
+            }
+                //1.3.3
+            else {
+                rotateRight(p->parent->child_right->child_left);
+                rotateLeft(p->parent->child_right);
+                return;
+            }
+        }
+    }
+    // rechter nachfolger
+    else {
+        if(p->parent->bal == 1) {
+            p->parent->bal = 0;
+        }
+        else if (p->parent->bal == 0){
+            p->parent->bal = -1;
+            return;
+        }
+        else {
+            //1.3.1
+            if(p->parent->child_left->bal == 0) {
+                rotateRight(p->parent->child_left);
+                // correct bal because bal is set in rotate
+                p->parent->bal = -1;
+                p->parent->parent->bal = 1;
+                return;
+            }
+                //1.3.2
+            else if(p->parent->child_left->bal == -1) {
+                rotateRight(p->parent->child_left);
+            }
+                //1.3.3
+            else {
+                rotateLeft(p->parent->child_left->child_right);
+                rotateRight(p->parent->child_left);
+                return;
+            }
+        }
+    }
+
+    upOut(p->parent);
 
 }
