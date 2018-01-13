@@ -240,3 +240,258 @@ TEST(AvlTest, Remove_Root_Test) {
      */
 
 }
+
+TEST(AvlTest, Remove_Double_RightLeft_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(15);
+    tree.addValue(28);
+    tree.addValue(13);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 15, 13, 25, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /  \     \
+     *     5    15   28
+     *         /
+     *        13
+     */
+
+    tree.removeValue(5);
+    EXPECT_EQ(tree.print(), "20, 13, 10, 15, 25, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *         \     \
+     *          15   28
+     *         /
+     *        13
+     * ->
+     *
+     *          20
+     *         /  \
+     *        10    25
+     *         \     \
+     *          13   28
+     *           \
+     *           15
+     * ->
+     *          20
+     *         /  \
+     *        13    25
+     *       /  \    \
+     *     10    15   28
+     *
+     */
+}
+
+TEST(AvlTest, Remove_Rotate_Left_Test) {
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(15);
+    tree.addValue(28);
+    tree.addValue(18);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 15, 18, 25, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /  \     \
+     *     5    15    28
+     *           \
+     *           18
+     */
+
+    tree.removeValue(5);
+    EXPECT_EQ(tree.print(), "20, 15, 10, 18, 25, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *         \     \
+     *          15    28
+     *           \
+     *           18
+     * ->
+     *
+     *          20
+     *         /  \
+     *        15    25
+     *       /  \     \
+     *     10    18    28
+     */
+}
+
+
+TEST(AvlTest, Remove_Double_LeftRight_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(23);
+    tree.addValue(28);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 28, \n");
+    tree.addValue(24);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 24, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     23    28
+     *             \
+     *             24
+     */
+
+    tree.removeValue(28);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 24, 23, 25, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /
+     *     5     23
+     *            \
+     *             24
+     * ->
+     *
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /
+     *     5     24
+     *          /
+     *        23
+     * ->
+     *          20
+     *         /  \
+     *        10    24
+     *      /      /  \
+     *     5     23    25
+     *
+     */
+}
+
+TEST(AvlTest, Remove_Rotate_Right_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(23);
+    tree.addValue(28);
+    tree.addValue(21);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 21, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     23    28
+     *           /
+     *          21
+     */
+
+    tree.removeValue(28);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 23, 21, 25, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /
+     *     5     23
+     *          /
+     *         21
+     * ->
+     *
+     *          20
+     *         /  \
+     *        10    23
+     *      /      /  \
+     *     5     21    25
+     */
+}
+
+TEST(AvlTest, Remove_Between_Both_1_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(23);
+    tree.addValue(28);
+    tree.addValue(21);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 21, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     23    28
+     *           /
+     *          21
+     */
+
+    tree.removeValue(25);
+
+    EXPECT_EQ(tree.print(), "20, 10, 5, 23, 21, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    23
+     *      /      /  \
+     *     5     21    28
+     */
+}
+
+TEST(AvlTest, Remove_Between_Both_2_Test) {
+
+    AvlTree tree;
+
+    tree.addValue(20);
+    tree.addValue(10);
+    tree.addValue(25);
+    tree.addValue(5);
+    tree.addValue(23);
+    tree.addValue(28);
+    tree.addValue(24);
+    EXPECT_EQ(tree.print(), "20, 10, 5, 25, 23, 24, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    25
+     *      /      /  \
+     *     5     23    28
+     *             \
+     *              24
+     */
+
+    tree.removeValue(25);
+
+    EXPECT_EQ(tree.print(), "20, 10, 5, 24, 23, 28, \n");
+    /*
+     *          20
+     *         /  \
+     *        10    24
+     *      /      /  \
+     *     5     23    28
+     */
+}

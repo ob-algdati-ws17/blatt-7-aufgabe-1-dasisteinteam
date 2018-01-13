@@ -29,7 +29,7 @@ bool AvlTree::addValue(int val) {
 
     //other elements
     Node* p = add(val, root);
-    if(p != nullptr && p->parent != nullptr) {
+    if(p != nullptr && p->parent != nullptr && p->parent->bal != 0) {
         upIn(p->parent);
     }
     // when p i a nullptr, the value was already in the tree
@@ -253,7 +253,7 @@ bool AvlTree::remove(Node *p) {
                 // height 2
                 if (parent->child_left->child_right != nullptr) {
                     rotateLeft(parent->child_left->child_right);
-                    rotateRight(parent->child_right);
+                    rotateRight(parent->child_left);
                 }
                 else if(parent->child_left->child_left != nullptr) {
                     rotateRight(parent->child_left);
